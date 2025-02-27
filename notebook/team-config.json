@@ -1,0 +1,221 @@
+{
+  "provider": "autogen_agentchat.teams.SelectorGroupChat",
+  "component_type": "team",
+  "version": 1,
+  "component_version": 1,
+  "description": "You are a group chat manager who manages a rap battle between agents. Rappers will take turns and then, finally, the Rap MC will give the lyrics a score and declare the winner. You must coordinate the agents.",
+  "label": "Rap Battle v2",
+  "config": {
+    "participants": [
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent that acts as a master of ceremony in a rap battle",
+        "label": "Rap MC Agent",
+        "config": {
+          "name": "rapmc_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "Chat completion client for OpenAI hosted models.",
+            "label": "OpenAIChatCompletionClient",
+            "config": {
+              "model": "gpt-4o-mini"              
+            }
+          },
+          "tools": [
+            {
+              "provider": "autogen_core.tools.FunctionTool",
+              "component_type": "tool",
+              "version": 1,
+              "component_version": 1,
+              "description": "Create custom tools by wrapping standard Python functions.",
+              "label": "FunctionTool",
+              "config": {
+                "source_code": "def get_list_of_words() -> str:\n    print(\"Get_list_of_words invoked\")\n    words = \"apple, banana, cherry, date, elderberry, Christmas\"\n    return words",
+                "name": "get_list_of_words",
+                "description": "Get a list of words that can be used to generate the lyrics for a rap song. Participants to the rap battle must use all the words returned by this function.",
+                "global_imports": [],
+                "has_cancellation_support": false
+              }
+            }
+          ],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that acts as a master of ceremony in a rap battle",
+          "system_message": "You are a rap MC and your role is run a rap battle with two contestants. The user will provide you the topic for the battle. Your main task is to be the master of ceremony and introduce the rap battle. \nYou must share some words of encouragement and describe the topic for the battle that was given by the user. \nYOU MUST USE THE TOPIC GIVEN BY THE USER, you can't make up one on your own. \nYou have access to a skill that gives you a list of words for rap lyrics. \nYOU MUST USE this skill to get a list of words. First, you're going to introduce the rap battle and then YOU MUST SHARE the list of words with the contenstants. \nThe contestants will need to create lyrics for the given topic and they must use all the words in the list you have shared.\nYou must be very enthusiastic and use a lot of exclamation marks. You must also use a lot of slang words and rap terms. You must also use emojis.",
+          "model_client_stream": false,
+          "reflect_on_tool_use": true,
+          "tool_call_summary_format": "{result}",
+          "label": "Rap MC Agent"
+        }
+      },
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent that generates rap lyrics in the style of Eminem",
+        "label": "Eminem Agent",
+        "config": {
+          "name": "eminem_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "Chat completion client for OpenAI hosted models.",
+            "label": "OpenAIChatCompletionClient",
+            "config": {
+              "model": "gpt-4o-mini"              
+            }
+          },
+          "tools": [],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that generates rap lyrics in the style of Eminem",
+          "system_message": "You are a rapper, and you rap in the style of Eminem. You are participating in a rap battle. You will be given a topic, and you will need to create the lyrics and rap about it. Be creative but remember to stay on topic. Do your best, since you're going to compete against another rapper.\n\nIn case it's a tie, the Judge might ask you to start another round and generate new lyrics.",
+          "model_client_stream": false,
+          "reflect_on_tool_use": false,
+          "tool_call_summary_format": "{result}",
+          "label": "Eminem Agent"
+        }
+      },
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent that generates rap lyrics in the style of Drake",
+        "label": "Drake Agent",
+        "config": {
+          "name": "drake_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "Chat completion client for OpenAI hosted models.",
+            "label": "OpenAIChatCompletionClient",
+            "config": {
+              "model": "gpt-4o-mini"
+            }
+          },
+          "tools": [],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that generates rap lyrics in the style of Drake",
+          "system_message": "You are a rapper, and you rap in the style of Drake. You are participating in a rap battle. You will be given a topic, and you will need to create the lyrics and rap about it. Be creative but remember to stay on topic. Do your best, since you're going to compete against another rapper.\n\nIn case it's a tie, the Judge might ask you to start another round and generate new lyrics.\n",
+          "model_client_stream": false,
+          "reflect_on_tool_use": false,
+          "tool_call_summary_format": "{result}",
+          "label": "Drake Agent"
+        }
+      },
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent that evaluates the rap lyrics and declares a winner",
+        "label": "Judge Agent",
+        "config": {
+          "name": "judge_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "Chat completion client for OpenAI hosted models.",
+            "label": "OpenAIChatCompletionClient",
+            "config": {
+              "model": "gpt-4o-mini"
+            }
+          },
+          "tools": [],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that evaluates the rap lyrics and declares a winner",
+          "system_message": "You are a judge in a rap battle. You will be given the lyrics of the rap battle, and you must give a score to each contestant. \nYou must give a score between 1 and 10 to each contestant.\n\nYou must ensure that the final score is given after all the other contestants have shared their lyrics. \n\nIn addition to the score, you also need to provide an explanation of why you assigned that score. \n\nIf the final score is a tie or the score difference between the two rappers is minimum (for example, Eminem scores 8 while Drake scores 9), YOU MUST ASK to run a new round, and the two rappers must generate new lyrics. YOU MUST NOT declare a winner in this case. However, you can't run more than 3 rounds.\n\nIf, instead, the score difference is 2 or more (for example. Eminem scores 7 and Drake scores 9), you must declare a winner.\n\nWhen you have a winner and the plan is complete, you can declare the winner and then YOU MUST RESPOND with TERMINATE.",
+          "model_client_stream": false,
+          "reflect_on_tool_use": true,
+          "tool_call_summary_format": "{result}",
+          "label": "Judge Agent"
+        }
+      }
+    ],
+    "termination_condition": {
+      "provider": "autogen_agentchat.conditions.TextMentionTermination",
+      "component_type": "termination",
+      "version": 1,
+      "component_version": 1,
+      "description": "Terminate the conversation if a specific text is mentioned.",
+      "label": "TextMentionTermination",
+      "config": {
+        "text": "TERMINATE",
+        "label": "TextMentionTermination",
+        "description": "Terminate the conversation if a specific text is mentioned.",
+        "config": {
+          "text": "TERMINATE"
+        }
+      }
+    },
+    "max_turns": 15,
+    "label": "Rap Battle v2",
+    "description": "You are a group chat manager who manages a rap battle between agents. Rappers will take turns and then, finally, the Rap MC will give the lyrics a score and declare the winner. You must coordinate the agents.",
+    "selector_prompt": "You are managing a dynamic, interactive rap battle with multiple AI agents. You must select an agent to perform the task:\n\n{roles}\n\nThe workflow is the following one:\n\n- The rapmc_agent begins the battle by introducing th event, setting the topic, and providing a list of words that the rappers must use.\n- Once the introduction is complete, eminem_agent and drake_agent will take turns to generate lyrics based on the provided topic.\n- After eminem_agent and drake_agent have performed, the judge_agent will evaluate the lyrics and give a score to each rapper. If the battle is a tie or the score difference between the two rappers is only 1 point (for example, eminem_agent scores 8 while drage_agent scores 9), the judge must request another round, until a maximum of 3.\nThe new round will start directly with the two rappers, without an introduction from the Rap MC agent.\n\nThe battle continues until the Judge Agent explicitly states \"TERMINATE\" in their response.\n\nCurrent conversation context:\n{history}\n\nRead the above conversation, then select an agent from {participants} to perform the next task.\nMake sure the planner agent has assigned tasks before other agents start working.\n\nOnly select one agent.",
+    "allow_repeated_speaker": true,
+    "model_client": {
+      "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+      "component_type": "model",
+      "version": 1,
+      "component_version": 1,
+      "description": "Chat completion client for OpenAI hosted models.",
+      "label": "OpenAIChatCompletionClient",
+      "config": {
+        "model": "gpt-4o-mini",        
+        "label": "OpenAIChatCompletionClient",
+        "description": "Chat completion client for OpenAI hosted models.",
+        "config": {
+          "model": "gpt-4o-mini"
+        }
+      }
+    }
+  }
+}
