@@ -1,0 +1,7 @@
+### Process Prompt
+POST http://localhost:8000/process-prompt/
+Content-Type: application/json
+
+{
+  "prompt": "Start a rap battle on the importance of education."
+}
