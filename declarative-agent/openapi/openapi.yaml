@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  title: Prediction API
+  description: API for predicting results based on input tasks
+  version: 1.0.0
+servers:
+  - url: https://j0slhlp9-8084.inc1.devtunnels.ms
+paths:
+  /predict/{task}:
+    get:
+      description: >-
+        Get result of Rap Battle based on the input topic
+      summary: Get Rap Battle Result
+      operationId: getRapBattleResult
+      parameters:
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The topic of the rap battle to be provided to the RAP agents
+      responses:
+        '200':
+          description: Successful prediction response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task successfully completed
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      task_result:
+                        type: object
+                        properties:
+                          messages:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                source:
+                                  type: string
+                                  example: user
+                                models_usage:
+                                  type: object
+                                  nullable: true
+                                  properties:
+                                    prompt_tokens:
+                                      type: integer
+                                      example: 117
+                                    completion_tokens:
+                                      type: integer
+                                      example: 475
+                                content:
+                                  type: string
+                                  example: write a post on MSFT stock
+                                type:
+                                  type: string
+                                  example: TextMessage
+                          stop_reason:
+                            type: string
+                            example: Text 'TERMINATE' mentioned
+                      usage:
+                        type: string
+                        example: ''
+                      duration:
+                        type: number
+                        format: float
+                        example: 10.031888246536255
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
